@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Daily Business Tracker</h2>
+        <input type="number" id="sales" placeholder="Enter Sales Amount">
+        <input type="number" id="inventory" placeholder="Enter Inventory Used">
+        <input type="number" id="expenses" placeholder="Enter Expenses">
+        <input type="number" id="pending" placeholder="Enter Pending Amount">
+        <input type="text" id="office" placeholder="Enter Office Name">
+        <button onclick="submitData()">Submit</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        function submitData() {
+            let sales = document.getElementById("sales").value;
+            let inventory = document.getElementById("inventory").value;
+            let expenses = document.getElementById("expenses").value;
+            let pending = document.getElementById("pending").value;
+            let office = document.getElementById("office").value;
+            let status = document.getElementById("status");
+
+            if (!sales || !inventory || !expenses || !pending || !office) {
+                status.innerText = "❌ Please fill all fields.";
+                status.style.color = "red";
+                return;
+            }
+
+            let apiUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL";  // Replace this with your script URL
+
+            let data = {
+                sales: sales,
+                inventory: inventory,
+                expenses: expenses,
+                pending: pending,
+                office: office
+            };
+
+            fetch(apiUrl, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.text())
+            .then(result => {
+                status.innerText = result;
+                status.style.color = "green";
+            })
+            .catch(error => {
+                status.innerText = "❌ Error submitting data.";
+                status.style.color = "red";
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>
